@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messedges</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" integrity="sha512-nzSGtgaJWS79WO+bCKLhowPkjbM+WI18/K4T77XPB4QPMybSKLozMFzDNPEHcWxN1dOx1gvYGKP39nXLNNZ8qg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <style>
+    a:hover {
+      text-decoration: solid 1px underline;
+    }
+    a:active {
+      color: #DC4C64;
+    }
+  </style>
+</head>
+<body class="bg-secondary">
+  <div class="container-xl text-dark bg-light px-4 shadow-lg" style="max-width: 830px;">
+    <div class="d-flex justify-content-between align-items-center py-2">
+      <h5 class="mb-0">Messedges</h5>
+      <div class="d-flex align-items-center">
+        <a href="/" class="btn btn-primary btn-rounded me-3">Download</a>
+        <a href="/" target="_blank">
+          <a href="" class="btn btn-dark btn-floating">
+            <i class="fab fa-github fa-xl text-white"></i>
+          </a>
+        </a>
+      </div>
+    </div>
+    <h3 class="fw-bold text-center mt-4">End-to-end encryption messenger for desktop</h3>
+    <h6 class="text-center">Full encryption of text, image and audio. Safest, fast, easy, open source.</h6>
+    <h5 class="fw-bold mt-3">Features</h5>
+    <ul>
+      <li>Creating rooms using <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange" target="_blank">Diffie–Hellman key exchange</a> with a password
+        <ol>
+          <li>The first user creates a password. The password is converted to a number (private key).</li>
+          <li>
+            Generating parameters g and p, g = 2 always and is a primitive root modulo p, p is a prime number of length 309.
+            This ensures that the secret key can be anything and the possible combinations = 10<sup><small>309</small></sup>
+          </li>
+          <li>Creating a public key</li>
+          <li>Saving the public key and p on the server</li>
+          <li>The second user creates his public key</li>
+          <li>The secret key is derived from your private key and the interlocutor's public key. The secret key (whole or part) is used as a key for all types of encryption</li>
+        </ol>
+      </li>
+      <li>Text encryption
+        <ul class="mb-2 text-truncate">
+          <span>Ciphertext: gQCMQgCgfN4MpQsyLzPRHD4czV7eO_yF_sNN8jDMTij0p839fGwShAKnye8iQr_bRE6pVCV8l3RscH_Jx3sEvFY5JQ==</span>
+          <br><span>Plaintext: My secret text.</span>
+        </ul>
+      <li>Image encryption
+        <ul class="mb-2">
+          <img src="{{ url_for('static', filename='image.png') }}" width="299px" class="border border-2 border-secondary shadow">
+          <i class="fas fa-exchange-alt text-secondary mx-3"></i>
+          <img src="{{ url_for('static', filename='image-e.png') }}" width="299px" class="border border-2 border-secondary shadow">
+        </ul>
+      </li>
+      <li>Audio encryption
+        <ul class="d-flex align-items-center">
+          <div>
+            <audio controls class="rounded-pill shadow-sm">
+              <source src="{{ url_for('static', filename='audio.wav') }}">
+            </audio>
+          </div>
+          <i class="fas fa-exchange-alt text-secondary mx-3 mb-1"></i>
+          <div>
+            <audio controls class="rounded-pill shadow-sm">
+              <source src="{{ url_for('static', filename='audio-e.wav') }}">
+            </audio>
+          </div>
+        </ul>
+      </li>
+    </ul>
+    <h5 class="fw-bold mt-3">Installing</h5>
+    <ol>
+      <li>Install <a href="https://www.python.org/downloads/" target="_blank">Python</a></li>
+      <li>Download <a href="/" target="_blank">console app</a></li>
+      <li>Open a command prompt in the folder Messedges:
+        <ul>
+          <li>
+            <code id="cd-1" class="fw-bold">cd Messedges</code>
+            <button id="cd-1-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('cd-1', 'cd-1-btn')">Copy</button>            
+          </li>
+        </ul>
+      </li>
+      <li>Install the dependencies:
+        <ul>
+          <li class="mb-1">Windows:
+            <code id="req-1" class="fw-bold">pip install -r requirements.txt</code>
+            <button id="req-1-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('req-1', 'req-1-btn')">Copy</button>
+          </li>
+          <li>macOS/Linux:
+            <code id="req-2" class="fw-bold">pip3 install -r requirements.txt</code>
+            <button id="req-2-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('req-2', 'req-2-btn')">Copy</button>
+          </li>
+        </ul>
+        <ul>
+        </ul>
+      </li>
+      <li>Run the app:
+        <ul>
+          <li class="mb-1">Windows:
+            <code id="run-1" class="fw-bold">python run.py</code>
+            <button id="run-1-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('run-1', 'run-1-btn')">Copy</button>
+          </li>
+          <li>macOS/Linux:
+            <code id="run-2" class="fw-bold">python3 run.py</code>
+            <button id="run-2-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('run-2', 'run-2-btn')">Copy</button>
+          </li>
+        </ul>
+      </li>
+    </ol>
+    <h5 class="fw-bold mt-3">Usage</h5>
+    <ul class="mb-5 pb-4">
+      <li>Limits
+        <ul>
+          <li>1 room per IP</li>
+        </ul>
+      </li>
+      <li>Room data available on <a href="https://messedges.com/room/room-name" target="_blank">https://messedges.com/room/&#60;room-name&#62;</a></li>
+      <li>Messages available on <a href="https://messedges.com/room/room-name/messages" target="_blank">https://messedges.com/room/&#60;room-name&#62;/messages</a></li>
+    </ul>
+  </div>
+  <script>
+    function copyText(text_id, btn_id) {
+      let text = document.getElementById(text_id);
+      let btn = document.getElementById(btn_id);
+      let input = document.createElement('input');
+      input.setAttribute('value', text.innerHTML);
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      btn.innerHTML = 'Copied';
+      setTimeout(() => {
+        btn.innerHTML = 'Copy';
+      }, 1000)
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js" integrity="sha512-oFBfx20Vuw8reYrngBlvcrgBmDcEAPE0Vv7Rb9b7JYZNHmDFdxZhiOTGm0CePa7ouSwfty9qwHQck1aVGWK5tA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>
