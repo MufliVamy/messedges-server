@@ -152,20 +152,23 @@ def new_text_message():
     sender_number = request.form['sender_number']
     room = db.session.query(Room).filter_by(name=name).first()
     if room is not None:
-        if sender_number in ('1', '2'):
-            messages = db.session.query(Message).filter_by(room_id=room.id, sender_number=sender_number).all()
-            length = 0
-            for i in messages:
-                if i.text is not None:
-                    length += len(i.text)
-            print(length)
-            if length < 50000:
-                message = Message(room_id=room.id, sender_number=sender_number, text=text)
-                db.session.add(message)
-                db.session.commit()
-                return jsonify({'success': 'Message sent'})
+        if room.public_key_2 is not None:
+            if sender_number in ('1', '2'):
+                messages = db.session.query(Message).filter_by(room_id=room.id, sender_number=sender_number).all()
+                length = 0
+                for i in messages:
+                    if i.text is not None:
+                        length += len(i.text)
+                print(length)
+                if length < 50000:
+                    message = Message(room_id=room.id, sender_number=sender_number, text=text)
+                    db.session.add(message)
+                    db.session.commit()
+                    return jsonify({'success': 'Message sent'})
+            else:
+                return jsonify({'error': 'Incorrect input'})
         else:
-            return jsonify({'error': 'Room not found'})
+            return jsonify({'error': 'Room is not confirmed'})
     else:
         return jsonify({'error': 'Room not found'})
 
@@ -177,26 +180,29 @@ def upload_file():
     sender_number = request.form['sender_number']
     room = db.session.query(Room).filter_by(name=name).first()
     if room is not None:
-        if sender_number in ('1', '2'):
-            filename = secure_filename(file.filename)
-            file_format = filename[len(filename) - 3:]
-            if file_format in ('png', 'wav'):
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                while True:
-                    new_filename = generate_name() + '.' + file_format
-                    if db.session.query(Message).filter_by(file=new_filename).first() is not None:
-                        continue
-                    else:
-                        break
-                message = Message(room_id=room.id, sender_number=sender_number, file=new_filename)
-                db.session.add(message)
-                db.session.commit()
-                os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
-                return jsonify({'success': 'File sent'})
+        if room.public_key_2 is not None:
+            if sender_number in ('1', '2'):
+                filename = secure_filename(file.filename)
+                file_format = filename[len(filename) - 3:]
+                if file_format in ('png', 'wav'):
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    while True:
+                        new_filename = generate_name() + '.' + file_format
+                        if db.session.query(Message).filter_by(file=new_filename).first() is not None:
+                            continue
+                        else:
+                            break
+                    message = Message(room_id=room.id, sender_number=sender_number, file=new_filename)
+                    db.session.add(message)
+                    db.session.commit()
+                    os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
+                    return jsonify({'success': 'File sent'})
+                else:
+                    return jsonify({'error': 'Incorrect format'})
             else:
-                return jsonify({'error': 'Incorrect format'})
+                return jsonify({'error': 'Incorrect input'})
         else:
-            return jsonify({'error': 'Room not found'})
+            return jsonify({'error': 'Room is not confirmed'})
     else:
         return jsonify({'error': 'Room not found'})
 
