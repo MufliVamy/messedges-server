@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Messedges</title>
+  <meta name="title" content="Messedges | End-to-end encryption messenger for desktop">
+  <meta name="description" content="Full encryption of text, image and audio. Safest, fast, easy, open source.">
+  <title>Messedges | End-to-end encryption messenger for desktop</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" integrity="sha512-nzSGtgaJWS79WO+bCKLhowPkjbM+WI18/K4T77XPB4QPMybSKLozMFzDNPEHcWxN1dOx1gvYGKP39nXLNNZ8qg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -23,11 +25,9 @@
     <div class="d-flex justify-content-between align-items-center py-2">
       <h5 class="mb-0">Messedges</h5>
       <div class="d-flex align-items-center">
-        <a href="/" class="btn btn-primary btn-rounded me-3">Download</a>
-        <a href="/" target="_blank">
-          <a href="" class="btn btn-dark btn-floating">
-            <i class="fab fa-github fa-xl text-white"></i>
-          </a>
+        <a href="https://github.com/ilyakotsar/messedges-client/releases/download/v1.0.0/Messedges.zip" class="btn btn-primary btn-rounded me-2" target="_blank">Download</a>
+        <a href="https://github.com/ilyakotsar/messedges-server" class="btn btn-dark btn-floating" target="_blank">
+          <i class="fab fa-github fa-xl text-white"></i>
         </a>
       </div>
     </div>
@@ -37,7 +37,7 @@
     <ul>
       <li>Creating rooms using <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange" target="_blank">Diffie–Hellman key exchange</a> with a password
         <ol>
-          <li>The first user creates a password. The password is converted to a number (private key).</li>
+          <li>The first user creates a password, which is converted into a number (private key)</li>
           <li>
             Generating parameters g and p, g = 2 always and is a primitive root modulo p, p is a prime number of length 309.
             This ensures that the secret key can be anything and the possible combinations = 10<sup><small>309</small></sup>
@@ -49,29 +49,41 @@
         </ol>
       </li>
       <li>Text encryption
-        <ul class="mb-2 text-truncate">
+        <ul class="text-truncate">
           <span>Ciphertext: gQCMQgCgfN4MpQsyLzPRHD4czV7eO_yF_sNN8jDMTij0p839fGwShAKnye8iQr_bRE6pVCV8l3RscH_Jx3sEvFY5JQ==</span>
-          <br><span>Plaintext: My secret text.</span>
+          <br><span>Plaintext: My secret text</span>
         </ul>
       <li>Image encryption
         <ul class="mb-2">
-          <img src="{{ url_for('static', filename='image.png') }}" width="299px" class="border border-2 border-secondary shadow">
-          <i class="fas fa-exchange-alt text-secondary mx-3"></i>
-          <img src="{{ url_for('static', filename='image-e.png') }}" width="299px" class="border border-2 border-secondary shadow">
+          <div class="row align-items-center">
+            <div class="col-md-5 p-0">
+              <img src="{{ url_for('static', filename='image.png') }}" width="300px" class="shadow">
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-exchange-alt text-secondary me-2"></i>
+            </div>
+            <div class="col-md-5 p-0">
+              <img src="{{ url_for('static', filename='image-e.png') }}" width="300px" class="shadow">
+            </div>
+          </div>
         </ul>
       </li>
       <li>Audio encryption
-        <ul class="d-flex align-items-center">
-          <div>
-            <audio controls class="rounded-pill shadow-sm">
-              <source src="{{ url_for('static', filename='audio.wav') }}">
-            </audio>
-          </div>
-          <i class="fas fa-exchange-alt text-secondary mx-3 mb-1"></i>
-          <div>
-            <audio controls class="rounded-pill shadow-sm">
-              <source src="{{ url_for('static', filename='audio-e.wav') }}">
-            </audio>
+        <ul>
+          <div class="row align-items-center">
+            <div class="col-md-5 p-0">
+              <audio controls class="rounded-pill shadow-sm">
+                <source src="{{ url_for('static', filename='audio.wav') }}">
+              </audio>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-exchange-alt text-secondary me-2"></i>
+            </div>
+            <div class="col-md-5 p-0">
+              <audio controls class="rounded-pill shadow-sm">
+                <source src="{{ url_for('static', filename='audio-e.wav') }}">
+              </audio>
+            </div>
           </div>
         </ul>
       </li>
@@ -79,7 +91,8 @@
     <h5 class="fw-bold mt-3">Installing</h5>
     <ol>
       <li>Install <a href="https://www.python.org/downloads/" target="_blank">Python</a></li>
-      <li>Download <a href="/" target="_blank">console app</a></li>
+      <li>Download <a href="https://github.com/ilyakotsar/messedges-client/releases/download/v1.0.0/Messedges.zip" target="_blank">console app</a></li>
+      <li>Unpack the archive Messedges.zip</li>
       <li>Open a command prompt in the folder Messedges:
         <ul>
           <li>
@@ -116,7 +129,7 @@
       </li>
     </ol>
     <h5 class="fw-bold mt-3">Usage</h5>
-    <ul class="mb-5 pb-4">
+    <ul class="mb-0 pb-4">
       <li>Limits
         <ul>
           <li>1 room per IP</li>
@@ -143,5 +156,7 @@
     }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js" integrity="sha512-oFBfx20Vuw8reYrngBlvcrgBmDcEAPE0Vv7Rb9b7JYZNHmDFdxZhiOTGm0CePa7ouSwfty9qwHQck1aVGWK5tA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script async src="//static.getclicky.com/101393057.js"></script>
+  <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101393057ns.gif" /></p></noscript>
 </body>
 </html>

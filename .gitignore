@@ -1,6 +1,7 @@
 instance/
 migrations/
 uploads/
+messedges.sock
 .env
 .venv
 env/

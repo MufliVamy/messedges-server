@@ -216,3 +216,8 @@ def clean_db():
             db.session.delete(message)
             db.session.commit()
     return jsonify({'success': 'Cleaned'})
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
