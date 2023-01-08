@@ -25,7 +25,7 @@
     <div class="d-flex justify-content-between align-items-center py-2">
       <h5 class="mb-0">Messedges</h5>
       <div class="d-flex align-items-center">
-        <a href="https://github.com/ilyakotsar/messedges-client/releases/download/v1.0.0/Messedges.zip" class="btn btn-primary btn-rounded me-2" target="_blank">Download</a>
+        <a href="https://github.com/ilyakotsar/messedges-client/releases/download/v1.0.0/Messedges.zip" class="btn btn-primary btn-rounded me-2">Download</a>
         <a href="https://github.com/ilyakotsar/messedges-server" class="btn btn-dark btn-floating" target="_blank">
           <i class="fab fa-github fa-xl text-white"></i>
         </a>
@@ -91,7 +91,7 @@
     <h5 class="fw-bold mt-3">Installing</h5>
     <ol>
       <li>Install <a href="https://www.python.org/downloads/" target="_blank">Python</a></li>
-      <li>Download <a href="https://github.com/ilyakotsar/messedges-client/releases/download/v1.0.0/Messedges.zip" target="_blank">console app</a></li>
+      <li>Download <a href="https://github.com/ilyakotsar/messedges-client/releases/download/v1.0.0/Messedges.zip">console app</a></li>
       <li>Unpack the archive Messedges.zip</li>
       <li>Open a command prompt in the folder Messedges:
         <ul>
@@ -129,15 +129,20 @@
       </li>
     </ol>
     <h5 class="fw-bold mt-3">Usage</h5>
-    <ul class="mb-0 pb-4">
+    <ul>
       <li>Limits
         <ul>
           <li>1 room per IP</li>
+	  <li>Maximum room size: 1 GB</li>
         </ul>
       </li>
-      <li>Room data available on <a href="https://messedges.com/room/room-name" target="_blank">https://messedges.com/room/&#60;room-name&#62;</a></li>
-      <li>Messages available on <a href="https://messedges.com/room/room-name/messages" target="_blank">https://messedges.com/room/&#60;room-name&#62;/messages</a></li>
+      <li>Room data: <a href="https://messedges.com/room/name" target="_blank">https://messedges.com/room/&#60;name&#62;</a></li>
+      <li>Messages: <a href="https://messedges.com/room/name/messages" target="_blank">https://messedges.com/room/&#60;name&#62;/messages</a></li>
+      <li>Room size: <a href="https://messedges.com/room/name/size" target="_blank">https://messedges.com/room/&#60;name&#62;/size</a></li>
+      <li>Find room by IP: <a href="https://messedges.com/find-room" target="_blank">https://messedges.com/find-room</a></li>
     </ul>
+    <div class="text-end text-muted pt-3">Author: Ilya Kotsar</div>
+    <div class="text-end text-muted pb-3">Licensed under the <a href="https://mit-license.org/" target="_blank">MIT License</a></div>
   </div>
   <script>
     function copyText(text_id, btn_id) {

@@ -36,10 +36,25 @@ class Message(db.Model):
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
 
 
+BASE_DIR = os.path.dirname(__file__)
+ROOM_SIZE_LIMIT = 10**9  # bytes
+
+
 def generate_name() -> str:
     symbols = string.ascii_letters + string.digits
     name = ''.join([random.choice(symbols) for _ in range(50)])
     return name
+
+
+def room_size(room_id) -> int:
+    messages = db.session.query(Message).filter_by(room_id=room_id).all()
+    size = 0  # bytes
+    for i in messages:
+        if i.text is not None:
+            size += len(i.text)
+        elif i.file is not None:
+            size += os.path.getsize(os.path.join(BASE_DIR, 'uploads', i.file))
+    return size
 
 
 @app.get('/')
@@ -77,6 +92,31 @@ def get_messages(name):
         return jsonify({'messages': data})
     else:
         return jsonify({'error': 'Room not found'})
+
+
+@app.get('/room/<name>/size')
+def get_room_size(name):
+    room = db.session.query(Room).filter_by(name=name).first()
+    if room is not None:
+        size = room_size(room.id)
+        free = ROOM_SIZE_LIMIT - size
+        return jsonify({'size (B)': size, 'free (B)': free})
+    else:
+        return jsonify({'error': 'Room not found'})
+
+
+@app.get('/find-room')
+def find_room_by_ip():
+    ip = request.remote_addr
+    room = db.session.query(Room).filter_by(ip_1=ip).first()
+    if room is not None:
+        return jsonify({'room name': room.name})
+    else:
+        room = db.session.query(Room).filter_by(ip_2=ip).first()
+        if room is not None:
+            return jsonify({'room name': room.name})
+        else:
+            return jsonify({'error': 'Room not found'})
 
 
 @app.post('/create-room')
@@ -154,17 +194,14 @@ def new_text_message():
     if room is not None:
         if room.public_key_2 is not None:
             if sender_number in ('1', '2'):
-                messages = db.session.query(Message).filter_by(room_id=room.id, sender_number=sender_number).all()
-                length = 0
-                for i in messages:
-                    if i.text is not None:
-                        length += len(i.text)
-                print(length)
-                if length < 50000:
+                size = room_size(room.id)
+                if size < ROOM_SIZE_LIMIT:                
                     message = Message(room_id=room.id, sender_number=sender_number, text=text)
                     db.session.add(message)
                     db.session.commit()
                     return jsonify({'success': 'Message sent'})
+                else:
+                    return jsonify({'error': 'Limit exceeded'})                
             else:
                 return jsonify({'error': 'Incorrect input'})
         else:
@@ -182,23 +219,29 @@ def upload_file():
     if room is not None:
         if room.public_key_2 is not None:
             if sender_number in ('1', '2'):
-                filename = secure_filename(file.filename)
-                file_format = filename[len(filename) - 3:]
-                if file_format in ('png', 'wav'):
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    while True:
-                        new_filename = generate_name() + '.' + file_format
-                        if db.session.query(Message).filter_by(file=new_filename).first() is not None:
-                            continue
-                        else:
-                            break
-                    message = Message(room_id=room.id, sender_number=sender_number, file=new_filename)
-                    db.session.add(message)
-                    db.session.commit()
-                    os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
-                    return jsonify({'success': 'File sent'})
+                if os.path.exists(os.path.join(BASE_DIR, 'uploads')) is False:
+                    os.mkdir(os.path.join(BASE_DIR, 'uploads'))
+                size = room_size(room.id)
+                if size < ROOM_SIZE_LIMIT:
+                    filename = secure_filename(file.filename)
+                    file_format = filename[len(filename) - 3:]
+                    if file_format in ('png', 'wav'):
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                        while True:
+                            new_filename = generate_name() + '.' + file_format
+                            if db.session.query(Message).filter_by(file=new_filename).first() is not None:
+                                continue
+                            else:
+                                break
+                        message = Message(room_id=room.id, sender_number=sender_number, file=new_filename)
+                        db.session.add(message)
+                        db.session.commit()
+                        os.rename(os.path.join(app.config['UPLOAD_FOLDER'], filename), os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
+                        return jsonify({'success': 'File sent'})
+                    else:
+                        return jsonify({'error': 'Incorrect format'})
                 else:
-                    return jsonify({'error': 'Incorrect format'})
+                    return jsonify({'error': 'Limit exceeded'})                    
             else:
                 return jsonify({'error': 'Incorrect input'})
         else:
