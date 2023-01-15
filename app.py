@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -12,9 +13,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = './uploads'
 db = SQLAlchemy()
-migrate = Migrate()
 db.init_app(app)
+migrate = Migrate()
 migrate.init_app(app, db)
+CORS(app)
 
 
 class Room(db.Model):
@@ -37,13 +39,24 @@ class Message(db.Model):
 
 
 BASE_DIR = os.path.dirname(__file__)
-ROOM_SIZE_LIMIT = 10**9  # bytes
+ROOM_SIZE_LIMIT = 10 ** 9 / 2  # 500 MB in bytes
 
 
 def generate_name() -> str:
     symbols = string.ascii_letters + string.digits
     name = ''.join([random.choice(symbols) for _ in range(50)])
     return name
+
+
+def rooms_by_ip(ip) -> list:
+    ips_1 = db.session.query(Room).filter_by(ip_1=ip).all()
+    ips_2 = db.session.query(Room).filter_by(ip_2=ip).all()
+    ips = []
+    for i in ips_1:
+        ips.append(i)
+    for i in ips_2:
+        ips.append(i)
+    return ips
 
 
 def room_size(room_id) -> int:
@@ -100,23 +113,22 @@ def get_room_size(name):
     if room is not None:
         size = room_size(room.id)
         free = ROOM_SIZE_LIMIT - size
-        return jsonify({'size (B)': size, 'free (B)': free})
+        return jsonify({'size': f'{size} B', 'free': f'{free} B'})
     else:
         return jsonify({'error': 'Room not found'})
 
 
-@app.get('/find-room')
-def find_room_by_ip():
+@app.get('/find-rooms')
+def find_rooms_by_ip():
     ip = request.remote_addr
-    room = db.session.query(Room).filter_by(ip_1=ip).first()
-    if room is not None:
-        return jsonify({'room name': room.name})
+    my_rooms = rooms_by_ip(ip)
+    if len(my_rooms) > 0:
+        room_names = []
+        for i in my_rooms:
+            room_names.append(i.name)
+            return jsonify({'IP': ip, 'rooms': room_names})
     else:
-        room = db.session.query(Room).filter_by(ip_2=ip).first()
-        if room is not None:
-            return jsonify({'room name': room.name})
-        else:
-            return jsonify({'error': 'Room not found'})
+        return jsonify({'IP': ip, 'error': 'Rooms not found'})    
 
 
 @app.post('/create-room')
@@ -124,7 +136,8 @@ def create_room():
     p = request.form['p']
     public_key_1 = request.form['public_key_1']
     ip = request.remote_addr
-    if db.session.query(Room).filter_by(ip_1=ip).first() is None and db.session.query(Room).filter_by(ip_2=ip).first() is None:
+    my_rooms = rooms_by_ip(ip)
+    if len(my_rooms) < 2:    
         if len(p) == 309 and len(public_key_1) <= 309:
             while True:
                 name = generate_name()
@@ -139,17 +152,19 @@ def create_room():
         else:
             return jsonify({'error': 'Incorrect input'})
     else:
-        return jsonify({'error': f'Your IP ({ip}) is already linked to another room'})
+        return jsonify({'error': 'Your IP is already linked to two rooms'})
+
 
 
 @app.post('/confirm-room')
 def confirm_room():
     name = request.form['name']
     public_key_2 = request.form['public_key_2']
-    ip = request.remote_addr
     room = db.session.query(Room).filter_by(name=name).first()
     if room is not None:
-        if ip != room.ip_1 and ip != room.ip_2:
+        ip = request.remote_addr
+        my_rooms = rooms_by_ip(ip)
+        if len(my_rooms) < 2:
             if room.public_key_2 is None:
                 if public_key_2 != room.public_key_1 and len(public_key_2) <= 309:
                     room.public_key_2 = public_key_2
@@ -161,7 +176,7 @@ def confirm_room():
             else:
                 return jsonify({'error': 'Room is already confirmed'})
         else:
-            return jsonify({'error': f'Your IP ({ip}) is already linked to another room'})
+            return jsonify({'error': 'Your IP is already linked to two rooms'})
     else:
         return jsonify({'error': 'Room not found'})
 
@@ -253,6 +268,21 @@ def upload_file():
 @app.get('/uploads/<name>')
 def open_file(name):
     return send_from_directory(app.config['UPLOAD_FOLDER'], name)
+
+
+@app.get('/info')
+def statistics():
+    rooms = db.session.query(Room).all()
+    messages = db.session.query(Message).all()
+    memory = 0
+    for i in rooms:
+        memory += room_size(i.id)
+    memory = round(memory / 1000, 3)
+    return jsonify({
+        'number of rooms': len(rooms),
+        'number of messages': len(messages),
+        'memory used': f'{memory} KB'
+    })
 
 
 @app.get('/clean-db')

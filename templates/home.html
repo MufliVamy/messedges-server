@@ -7,7 +7,7 @@
   <meta name="title" content="Messedges | End-to-end encryption messenger for desktop">
   <meta name="description" content="Full encryption of text, image and audio. Safest, fast, easy, open source.">
   <title>Messedges | End-to-end encryption messenger for desktop</title>
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" integrity="sha512-nzSGtgaJWS79WO+bCKLhowPkjbM+WI18/K4T77XPB4QPMybSKLozMFzDNPEHcWxN1dOx1gvYGKP39nXLNNZ8qg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
@@ -17,6 +17,9 @@
     }
     a:active {
       color: #DC4C64;
+    }
+    a.btn {
+      text-decoration: none;
     }
   </style>
 </head>
@@ -132,14 +135,15 @@
     <ul>
       <li>Limits
         <ul>
-          <li>1 room per IP</li>
-	  <li>Maximum room size: 1 GB</li>
+          <li>2 rooms per IP</li>
+          <li>Maximum room size: 500 MB</li>
         </ul>
       </li>
       <li>Room data: <a href="https://messedges.com/room/name" target="_blank">https://messedges.com/room/&#60;name&#62;</a></li>
       <li>Messages: <a href="https://messedges.com/room/name/messages" target="_blank">https://messedges.com/room/&#60;name&#62;/messages</a></li>
       <li>Room size: <a href="https://messedges.com/room/name/size" target="_blank">https://messedges.com/room/&#60;name&#62;/size</a></li>
-      <li>Find room by IP: <a href="https://messedges.com/find-room" target="_blank">https://messedges.com/find-room</a></li>
+      <li>Find rooms by IP: <a href="https://messedges.com/find-rooms" target="_blank">https://messedges.com/find-rooms</a></li>
+      <li>Statistics: <a href="https://messedges.com/info" target="_blank">https://messedges.com/info</a></li>
     </ul>
     <div class="text-end text-muted pt-3">Author: Ilya Kotsar</div>
     <div class="text-end text-muted pb-3">Licensed under the <a href="https://mit-license.org/" target="_blank">MIT License</a></div>
