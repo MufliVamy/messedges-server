@@ -48,6 +48,14 @@ def generate_name() -> str:
     return name
 
 
+def user_ip() -> str:
+    if request.headers.getlist('X-Forwarded-For'):
+        ip = request.headers.getlist('X-Forwarded-For')[0]
+    else:
+        ip = request.remote_addr
+    return ip
+
+
 def rooms_by_ip(ip) -> list:
     ips_1 = db.session.query(Room).filter_by(ip_1=ip).all()
     ips_2 = db.session.query(Room).filter_by(ip_2=ip).all()
@@ -120,7 +128,7 @@ def get_room_size(name):
 
 @app.get('/find-rooms')
 def find_rooms_by_ip():
-    ip = request.remote_addr
+    ip = user_ip()
     my_rooms = rooms_by_ip(ip)
     if len(my_rooms) > 0:
         room_names = []
@@ -135,7 +143,7 @@ def find_rooms_by_ip():
 def create_room():
     p = request.form['p']
     public_key_1 = request.form['public_key_1']
-    ip = request.remote_addr
+    ip = user_ip()
     my_rooms = rooms_by_ip(ip)
     if len(my_rooms) < 2:    
         if len(p) == 309 and len(public_key_1) <= 309:
@@ -162,7 +170,7 @@ def confirm_room():
     public_key_2 = request.form['public_key_2']
     room = db.session.query(Room).filter_by(name=name).first()
     if room is not None:
-        ip = request.remote_addr
+        ip = user_ip()
         my_rooms = rooms_by_ip(ip)
         if len(my_rooms) < 2:
             if room.public_key_2 is None:
