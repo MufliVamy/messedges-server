@@ -15,7 +15,7 @@ app.config['UPLOAD_FOLDER'] = './uploads'
 db = SQLAlchemy()
 db.init_app(app)
 migrate = Migrate()
-migrate.init_app(app, db)
+migrate.init_app(app, db, render_as_batch=True)
 CORS(app)
 
 
