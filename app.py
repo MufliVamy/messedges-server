@@ -6,16 +6,23 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
+from sqlalchemy import MetaData
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = './uploads'
-db = SQLAlchemy()
-db.init_app(app)
-migrate = Migrate()
-migrate.init_app(app, db, render_as_batch=True)
+convention = {
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+metadata = MetaData(naming_convention=convention)
+db = SQLAlchemy(app, metadata=metadata)
+Migrate(app, db, render_as_batch=True)
 CORS(app)
 
 
@@ -303,8 +310,4 @@ def clean_db():
             db.session.delete(message)
             db.session.commit()
     return jsonify({'success': 'Cleaned'})
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
 
