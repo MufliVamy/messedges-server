@@ -2,6 +2,7 @@ import os
 import random
 import string
 from datetime import datetime
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,8 +10,9 @@ from flask_cors import CORS
 from sqlalchemy import MetaData
 from werkzeug.utils import secure_filename
 
+load_dotenv()
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = './uploads'
 convention = {
