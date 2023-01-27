@@ -40,11 +40,11 @@ class Room(db.Model):
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
     sender_number = db.Column(db.String, nullable=False)
     text = db.Column(db.Text)
     file = db.Column(db.String, unique=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -111,7 +111,7 @@ def get_room(name):
 def get_messages(name):
     room = db.session.query(Room).filter_by(name=name).first()
     if room is not None:
-        messages = db.session.query(Message).filter_by(room_id=room.id).order_by(Message.timestamp).all()
+        messages = db.session.query(Message).filter_by(room_id=room.id).order_by(Message.created_at).all()
         data = []
         for i in messages:
             data.append({
@@ -307,7 +307,7 @@ def clean_db():
     rooms = db.session.query(Room).all()
     for i in rooms:
         message = db.session.query(Message).filter_by(room_id=i.id).first()
-        diff = datetime.utcnow() - message.timestamp
+        diff = datetime.utcnow() - message.created_at
         if diff.days > 365:
             db.session.delete(message)
             db.session.commit()
