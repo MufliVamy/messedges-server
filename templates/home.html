@@ -7,16 +7,20 @@
   <meta name="title" content="Messedges | End-to-end encryption messenger for desktop">
   <meta name="description" content="Full encryption of text, image and audio. Safest, fast, simple, open source.">
   <title>Messedges | End-to-end encryption messenger for desktop</title>
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" href="/static/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" integrity="sha512-nzSGtgaJWS79WO+bCKLhowPkjbM+WI18/K4T77XPB4QPMybSKLozMFzDNPEHcWxN1dOx1gvYGKP39nXLNNZ8qg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <style>
     a:hover {
-      text-decoration: solid 1px underline;
+      text-decoration: solid underline 1px;
     }
     a:active {
-      color: #DC4C64;
+      color: #ffffff;
+      background-color: #3b71ca;
+      text-decoration: none;
     }
     a.btn {
       text-decoration: none;
@@ -60,13 +64,13 @@
         <ul class="mb-2">
           <div class="row align-items-center">
             <div class="col-md-5 p-0">
-              <img src="{{ url_for('static', filename='image.png') }}" width="300px" class="shadow">
+              <img src="/static/image.png" width="300" class="shadow">
             </div>
             <div class="col-auto">
               <i class="fas fa-exchange-alt text-secondary me-2"></i>
             </div>
             <div class="col-md-5 p-0">
-              <img src="{{ url_for('static', filename='image-e.png') }}" width="300px" class="shadow">
+              <img src="/static/image-e.png" width="300" class="shadow">
             </div>
           </div>
         </ul>
@@ -76,7 +80,7 @@
           <div class="row align-items-center">
             <div class="col-md-5 p-0">
               <audio controls class="rounded-pill shadow-sm">
-                <source src="{{ url_for('static', filename='audio.wav') }}">
+                <source src="/static/audio.wav">
               </audio>
             </div>
             <div class="col-auto">
@@ -84,7 +88,7 @@
             </div>
             <div class="col-md-5 p-0">
               <audio controls class="rounded-pill shadow-sm">
-                <source src="{{ url_for('static', filename='audio-e.wav') }}">
+                <source src="/static/audio-e.wav">
               </audio>
             </div>
           </div>
@@ -100,7 +104,7 @@
         <ul>
           <li>
             <code id="cd-1" class="fw-bold">cd Messedges</code>
-            <button id="cd-1-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('cd-1', 'cd-1-btn')">Copy</button>            
+            <button id="cd-1-btn" class="btn btn-light btn-sm btn-rounded" onclick="copyText('cd-1', 'cd-1-btn')">Copy</button>
           </li>
         </ul>
       </li>
@@ -139,11 +143,11 @@
           <li>Maximum room size: 500 MB</li>
         </ul>
       </li>
-      <li>Room data: <a href="https://messedges.com/room/name" target="_blank">https://messedges.com/room/&#60;name&#62;</a></li>
-      <li>Messages: <a href="https://messedges.com/room/name/messages" target="_blank">https://messedges.com/room/&#60;name&#62;/messages</a></li>
-      <li>Room size: <a href="https://messedges.com/room/name/size" target="_blank">https://messedges.com/room/&#60;name&#62;/size</a></li>
-      <li>Find rooms by IP: <a href="https://messedges.com/find-rooms" target="_blank">https://messedges.com/find-rooms</a></li>
-      <li>Statistics: <a href="https://messedges.com/info" target="_blank">https://messedges.com/info</a></li>
+      <li>Room data: <a href="https://messedges.com/room/name" target="_blank">messedges.com/room/&#60;name&#62;</a></li>
+      <li>Messages: <a href="https://messedges.com/room/name/messages" target="_blank">messedges.com/room/&#60;name&#62;/messages</a></li>
+      <li>Room size: <a href="https://messedges.com/room/name/size" target="_blank">messedges.com/room/&#60;name&#62;/size</a></li>
+      <li>Find rooms by IP: <a href="https://messedges.com/find-rooms" target="_blank">messedges.com/find-rooms</a></li>
+      <li>Statistics: <a href="https://messedges.com/info" target="_blank">messedges.com/info</a></li>
     </ul>
     <div class="text-end text-muted py-3"><small>Licensed under the <a href="https://mit-license.org/" target="_blank">MIT License</a></small></div>
   </div>

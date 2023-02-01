@@ -130,7 +130,7 @@ def get_room_size(name):
     if room is not None:
         size = room_size(room.id)
         free = ROOM_SIZE_LIMIT - size
-        return jsonify({'size': f'{size} B', 'free': f'{free} B'})
+        return jsonify({'used': f'{size} B', 'available': f'{free} B'})
     else:
         return jsonify({'error': 'Room not found'})
 
